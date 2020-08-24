@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <!-- Include meta tag to ensure proper rendering and touch zooming -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       
+              
+       <link rel="stylesheet" type="text/css" href="js/jquery.mobile-1.4.5.css">
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile-1.4.5.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- <script src="cordova.js"></script> -->
+
+    <link rel="stylesheet" href="leaf/leaflet.css" />
+    <script src="leaf/leaflet.js"></script>
+
+    <script src="cordova.js"></script>
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/esri-leaflet"></script>
+    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
+    <script src="https://unpkg.com/esri-leaflet-geocoder"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+    <script src="https://kit.fontawesome.com/ca8e9033cf.js" crossorigin="anonymous"></script>
+
+   
+
+
+    </head>
+
+<body>
+
+    <div data-role="page" id="home">
+
+
+		<div data-role="header">
+			<h1>HomePage</h1>
+		</div>
+
+
+
+	
+
+        <div data-role="main" class="ui-content">
+
+            <a href="#my" data-role="button">My Location</a>
+
+            <a href="#search" data-role="button">Search</a>
+            
+            <a href="#build" data-role="button">What's Around</a>
+
+
+		</div>
+		
+
+
+	</div>
+
+
+
+    
+
+
+    <div data-role="page" id="my">
+
+
+        <div data-role="header">
+            <h1>MyApp-Find Me</h1>
+        </div>
+
+        <div class="nav">
+			<div data-role="navbar">
+
+
+				<ul>
+
+					<li><a href="#home" data-icon="home">Home</a></li>
+					<li><a href="#" data-icon="grid">My Location</a><br></li>
+                    <li><a href="#search" data-icon="info">Search</a><br></li>
+                    <li> <a href="#build" data-icon="grid">What's Around</a></li>
+
+			</div>
+		</div>
+
+
+        <div data-role="main" class="ui-content">
+
+            <body>
+                <div id="mapid" style="width: 600px; height: 400px;"></div>
+                <script type="text/javascript">
+                  if (navigator.geolocation == undefined) {
+                    alert("Geolocation undefined");
+                  } else {
+                    alert("Geolocation Available");
+              
+                    //missing code 1: call to getCurrentPosition function
+              
+                    navigator.geolocation.getCurrentPosition(userLocated, locationError);
+                    //missing code 2: define function userLocated
+                    function userLocated(position) {
+                      var latitude = position.coords.latitude;
+                      var longitude = position.coords.longitude;
+                      alert("Lat:" + latitude + ", Long:" + longitude);
+              
+                      var mymap = L.map('mapid').setView([latitude, longitude], 16);
+                      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                        maxZoom: 19,
+                        attribution: 'Map data &copy;' +
+                          '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>' +
+                          'contributors,<a href="https://creativecommons.org/licenses' +
+                          '/by-sa/2.0/">CC-BY-SA</a>,Imagery © <a href="https://' +
+                          'www.mapbox.com/">Mapbox</a>',
+                        id: 'mapbox.streets',
+                        accessToken:'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYyc'+
+                        'XBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+                      }).addTo(mymap);
+                      var marker = L.marker([latitude, longitude]).addTo(mymap);
+              
+                      marker.bindPopup("You Are Here").openPopup();
+              
+                     
+                    }
+              
+              
+              
+                    function locationError(error) {
+                      alert("Error code: " + error.code);
+                          //Replace this alert with proper error handling, using a switch case statement
+                          //Details are provided in the slides
+                          switch(error.code) {
+              case error.PERMISSION_DENIED:
+              alert("Permission Denied- " + error.message);
+              break;
+              case error.POSITION_UNAVAILABLE:
+              alert("Position Not Available- "+ error.message);
+              break;
+              case error.TIMEOUT:
+              alert("Request Time out- "+ error.message);
+              break;
+                                }
+                              }
+                            }
+     
+
+              
+                </script>
+
+            </div>
+
+        </div>
+
+
+
+        
+	<div data-role="page" id="search">
+
+
+		<div data-role="header">
+			<h1>Simple Calculator</h1>
+		</div>
+
+
+
+		<div class="nav">
+			<div data-role="navbar">
+
+
+				<ul>
+
+                    <li> <a href="#home" class="ui-btn ui-icon-home ui-btn-icon-top">Home</a></li>
+                    <li><a href="#my" class="ui-btn ui-icon-grid ui-btn-icon-top">My Location</a><br></li>
+                    <li><a href="#" class="ui-btn ui-icon-info ui-btn-icon-top">Search</a><br></li>
+                    <li> <a href="#build" class="ui-btn ui-icon-home ui-btn-icon-top">What's Around</a></li>
+
+			</div>
+		</div>
+
+        <div data-role="main" class="ui-content">
+
+
+            <div id="map" style="width: 600px; height: 600px;"></div>
+  <script type="text/javascript">
+    if (navigator.geolocation == undefined) {
+      alert("Geolocation undefined");
+    } else {
+      alert("Geolocation Available");
+
+      //missing code 1: call to getCurrentPosition function
+
+      navigator.geolocation.getCurrentPosition(userLocated, locationError);
+      //missing code 2: define function userLocated
+      function userLocated(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        alert("Lat:" + latitude + ", Long:" + longitude);
+
+        var mymap = L.map('map').setView([0,0], 20);
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+          maxZoom: 60,
+          attribution: 'Map data &copy;' +
+            '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>' +
+            'contributors,<a href="https://creativecommons.org/licenses' +
+            '/by-sa/2.0/">CC-BY-SA</a>,Imagery © <a href="https://' +
+            'www.mapbox.com/">Mapbox</a>',
+          id: 'mapbox.streets',
+          accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYyc' +
+            'XBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+        }).addTo(mymap);
+        var marker = L.marker([latitude, longitude]).addTo(mymap);
+
+        marker.bindPopup("You are Here").openPopup();
+
+      var searchControl = L.esri.Geocoding.geosearch().addTo(mymap);
+      var results = new L.LayerGroup().addTo(mymap);
+      searchControl.on('results', function(data) {
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+          results.addLayer(L.marker(data.results[i].latlng));
+        }
+      });
+
+      var geocodeService = L.esri.Geocoding.geocodeService();
+      mymap.on('click', function(e) {
+        geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
+          if (error) {
+            return;
+          }
+          var popLocation = e.latlng;
+          var popup = L.popup()
+            .setLatLng(popLocation)
+            .setContent(result.address.Match_addr)
+            .openOn(mymap);
+        });
+      });
+    }
+
+    function locationError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("Permission Denied- " + error.message);
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Position Not Available- " + error.message);
+          break;
+        case error.TIMEOUT:
+          alert("Request Time out- " + error.message);
+          break;
+      }
+    }
+  }
+</script>
+
+</div>
+
+<div data-role="page" id="build">
+
+
+    <div data-role="header">
+        <h1>Simple Calculator</h1>
+    </div>
+
+
+
+    <div class="nav">
+
+        <div data-role="navbar">
+
+            <ul>
+
+                <li> <a href="#home" class="ui-btn ui-icon-home ui-btn-icon-top">Home</a></li>
+                <li><a href="#my" class="ui-btn ui-icon-grid ui-btn-icon-top">My Location</a><br></li>
+                <li><a href="#search" class="ui-btn ui-icon-info ui-btn-icon-top">Search</a><br></li>
+                <li><a href="#" class="ui-btn ui-icon-info ui-btn-icon-top">What's Around</a><br></li>
+
+        </div>
+    </div>
+    <div data-role="main" class="ui-content">
+
+        <div id="map1"></div>
+
+        <script>
+          var map = L.map('map1').setView([0,0], 13);
+        
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(map);
+        
+          var geocodeService = L.esri.Geocoding.geocodeService();
+        
+          map.on('click', function (e) {
+            geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
+              if (error) {
+                return;
+              }
+        
+              L.marker(result.latlng).addTo(map).bindPopup(result.address.Match_addr).openPopup();
+            });
+          });
+        </script>
+
+
+    </div>
+
+	</div>	
+
+</body>
+
+</html>
